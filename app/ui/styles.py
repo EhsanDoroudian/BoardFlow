@@ -32,6 +32,34 @@ QLineEdit {
 QLineEdit:focus {
     border: 1px solid #9B5CFF;
 }
+
+QListWidget {
+
+    background-color: #1D1928;
+
+    border: 1px solid #342B45;
+
+    border-radius: 10px;
+
+    color: #F2F0F7;
+
+    padding: 6px;
+
+}
+
+QListWidget::item {
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+}
+
+QListWidget::item:selected {
+
+    background-color: #34204F;
+
+}
 """
 
 
@@ -68,5 +96,33 @@ QLineEdit {
 
 QLineEdit:focus {
     border: 1px solid #7138C8;
+}
+
+QListWidget {
+
+    background-color: #FFFFFF;
+
+    border: 1px solid #D5CEE0;
+
+    border-radius: 10px;
+
+    color: #211B2B;
+
+    padding: 6px;
+
+}
+
+QListWidget::item {
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+}
+
+QListWidget::item:selected {
+
+    background-color: #E8DDF5;
+
 }
 """
