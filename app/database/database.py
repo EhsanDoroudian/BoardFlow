@@ -46,6 +46,20 @@ class Database:
 
         return cursor.fetchall()
     
+    def search_clipboard_items(self, query):
+        escaped = query.replace("%", "#%").replace("_", "#_")
+        cursor = self.connection.execute(
+            """
+            SELECT id, content, created_at
+            FROM clipboard_items
+            WHERE content LIKE ? ESCAPE '#'
+            ORDER BY id DESC
+            """,
+            (f"%{escaped}%",),
+        )
+
+        return cursor.fetchall()
+
     def clear_history(self):
         self.connection.execute(
             """

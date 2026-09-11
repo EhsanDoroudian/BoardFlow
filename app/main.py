@@ -1,5 +1,6 @@
 import sys
 
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QApplication,
     QLabel,
@@ -43,6 +44,7 @@ class MainWindow(QMainWindow):
 
         search = QLineEdit()
         search.setPlaceholderText("Search clipboard history...")
+        search.textChanged.connect(self.handle_search)
 
         history_title = QLabel("Clipboard History")
         history_title.setObjectName("history_title")
@@ -60,26 +62,45 @@ class MainWindow(QMainWindow):
         layout.addWidget(history_list)
 
         self.history_list = history_list
+        self.search_field = search
 
         self.setCentralWidget(central_widget)
 
     def load_history(self):
         items = self.database.get_clipboard_items()
+        self._populate_list(items)
+
+    def _populate_list(self, items):
+        self.history_list.clear()
 
         for item in items:
             _, content, created_at = item
-
-            self.history_list.addItem(
-                f"{content}\n{created_at}"
-            )
+            list_item = QListWidgetItem(f"{content}\n{created_at}")
+            list_item.setData(Qt.UserRole, content)
+            self.history_list.addItem(list_item)
             
+    def handle_search(self, query):
+        if not query.strip():
+            items = self.database.get_clipboard_items()
+        else:
+            items = self.database.search_clipboard_items(query.strip())
+
+        self._populate_list(items)
+
     def handle_new_clipboard(self, text):
         self.database.add_clipboard_item(text)
 
-        self.history_list.insertItem(0, text)
+        query = self.search_field.text().strip()
+        if query:
+            items = self.database.search_clipboard_items(query)
+            self._populate_list(items)
+        else:
+            list_item = QListWidgetItem(text)
+            list_item.setData(Qt.UserRole, text)
+            self.history_list.insertItem(0, list_item)
 
     def handle_item_clicked(self, item):
-        text = item.text().split("\n")[0]
+        text = item.data(Qt.UserRole)
 
         self.monitor.ignore_next(text)
         self.manager.copy_text(text)
@@ -87,6 +108,7 @@ class MainWindow(QMainWindow):
     def clear_history(self):
         self.database.clear_history()
         self.history_list.clear()
+        self.search_field.clear()
 
 def main():
     app = QApplication(sys.argv)
