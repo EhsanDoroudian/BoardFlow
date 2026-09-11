@@ -60,6 +60,34 @@ QListWidget::item:selected {
     background-color: #34204F;
 
 }
+
+QPushButton {
+
+    background-color: #34204F;
+
+    border: 1px solid #6F42A5;
+
+    border-radius: 8px;
+
+    padding: 8px 14px;
+
+    color: #FFFFFF;
+
+    font-weight: bold;
+
+}
+
+QPushButton:hover {
+
+    background-color: #452866;
+
+}
+
+QPushButton:pressed {
+
+    background-color: #28183D;
+
+}
 """
 
 

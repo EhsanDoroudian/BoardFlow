@@ -45,6 +45,15 @@ class Database:
         )
 
         return cursor.fetchall()
+    
+    def clear_history(self):
+        self.connection.execute(
+            """
+            DELETE FROM clipboard_items
+            """
+        )
 
+        self.connection.commit()
+        
     def close(self):
         self.connection.close()

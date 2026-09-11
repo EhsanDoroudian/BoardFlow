@@ -10,6 +10,7 @@ class ClipboardMonitor(QObject):
         super().__init__()
 
         self.last_text = ""
+        self.ignored_text = None
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.check_clipboard)
@@ -19,6 +20,9 @@ class ClipboardMonitor(QObject):
 
     def stop(self):
         self.timer.stop()
+
+    def ignore_next(self, text):
+        self.ignored_text = text
 
     def check_clipboard(self):
         result = subprocess.run(
@@ -39,4 +43,9 @@ class ClipboardMonitor(QObject):
             return
 
         self.last_text = text
+
+        if text == self.ignored_text:
+            self.ignored_text = None
+            return
+
         self.text_copied.emit(text)
