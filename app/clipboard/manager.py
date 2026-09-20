@@ -1,12 +1,13 @@
-import subprocess
+from PySide6.QtGui import QClipboard, QGuiApplication
 
 
 class ClipboardManager:
-
     def copy_text(self, text):
-        subprocess.run(
-            ["wl-copy"],
-            input=text,
-            text=True,
-            check=True,
-        )
+        app = QGuiApplication.instance()
+        if app is None:
+            return False
+        clipboard = app.clipboard()
+        if clipboard is None:
+            return False
+        clipboard.setText(text, QClipboard.Mode.Clipboard)
+        return True

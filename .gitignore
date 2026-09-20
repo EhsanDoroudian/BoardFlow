@@ -34,3 +34,6 @@ dist/
 *.log
 
 boardflow.db
+
+# Trigger files
+.cache/
