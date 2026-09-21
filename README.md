@@ -1,77 +1,103 @@
 # BoardFlow
 
-A small clipboard history manager for Linux Wayland desktops.
+مدیر سادهٔ تاریخچهٔ کلیپ‌بورد برای دسکتاپ لینوکس (GNOME / Wayland).
 
-## Features
+پروژهٔ آموزشی و کاربردی است: متن‌هایی که کپی می‌کنید ذخیره می‌شوند تا بعداً جستجو و با یک کلیک برگردانده شوند. محصول تجاری نیست.
 
-- Monitor clipboard changes automatically
-- Store clipboard history in a local SQLite database
-- Search through clipboard history
-- Restore any previous clipboard item with one click
-- Support for multiline and Unicode text
-- System tray integration (runs in background)
-- Global shortcut: `Ctrl+Shift+V` to show the window
-- Autostart on login
+## امکانات
 
-## Requirements
+- ذخیرهٔ خودکار متن کلیپ‌بورد در SQLite
+- جستجو در تاریخچه
+- بازگرداندن آیتم با کلیک
+- پاک‌کردن کل تاریخچه
+- اجرا در پس‌زمینه و سینی سیستم
+- میانبر سراسری: `Ctrl+Shift+V`
+- اجرای خودکار پس از ورود به سیستم
 
+## فناوری
+
+Python 3.12، PySide6، SQLite، `wl-clipboard` (`wl-copy` / `wl-paste`).
+
+## ساختار
+
+```
+BoardFlow/
+├── app/
+│   ├── main.py
+│   ├── autostart.py
+│   ├── shortcut.py
+│   ├── clipboard/
+│   ├── database/
+│   └── ui/
+├── scripts/
+│   ├── boardflow-run.sh
+│   └── boardflow-shortcut.py
+├── screenshots/
+├── install.sh
+├── uninstall.sh
+└── requirements.txt
+```
+
+## پیش‌نیاز
+
+- لینوکس Wayland (تست‌شده روی Ubuntu + GNOME)
 - Python 3.12+
-- Wayland desktop environment (Ubuntu 24)
-- `wl-clipboard` system package (provides `wl-copy` and `wl-paste`)
-
-### Installing system dependencies
+- بستهٔ سیستمی `wl-clipboard`
 
 ```bash
 sudo apt install wl-clipboard
 ```
 
-## Installation
+## نصب و اجرا
 
 ```bash
-# Clone the repository
-git clone <repository-url>
+git clone <https://github.com/EhsanDoroudian/BoardFlow>
 cd BoardFlow
-
-# Create and activate virtual environment
 python3 -m venv venv
 source venv/bin/activate
-
-# Install Python dependencies
 pip install -r requirements.txt
-```
-
-## Usage
-
-```bash
 ./scripts/boardflow-run.sh
 ```
 
-Or with the venv active:
+حتماً از پایتون `venv` استفاده کنید؛ `python3` سیستم معمولاً PySide6 ندارد.
+
+اتواستارت و میانبر گنوم:
 
 ```bash
-python -m app.main
+./install.sh
 ```
 
-BoardFlow will start monitoring your clipboard. Copy any text and it will appear in the history list. Click any item to restore it to your clipboard.
-
-Start it with `venv/bin/python` (or the launcher script). System `python3` does not have PySide6, so login autostart used to fail immediately.
-
-### System Tray
-
-BoardFlow runs in the system tray. Closing the window hides it to the tray instead of quitting. Double-click the tray icon or use the tray menu to show the window.
-
-### Global Shortcut
-
-Press `Ctrl+Shift+V` anywhere on the desktop to show BoardFlow.
-
-### Autostart
-
-`./install.sh` enables login autostart (GNOME Startup Applications plus a user systemd service). After a reboot BoardFlow starts in the background; press `Ctrl+Shift+V` to show it.
-
-To disable autostart:
+حذف اتواستارت و میانبر:
 
 ```bash
 ./uninstall.sh
 ```
 
-This creates/removes `~/.config/autostart/boardflow.desktop` and registers/unregisters the global shortcut.
+تاریخچه در `~/.local/share/boardflow/` می‌ماند.
+
+## استفاده
+
+متن را کپی کنید تا در فهرست بیاید. روی آیتم کلیک کنید تا دوباره در کلیپ‌بورد قرار گیرد. با «Clear History» همه پاک می‌شود.
+
+بستن پنجره برنامه را نمی‌بندد؛ به سینی می‌رود. دابل‌کلیک روی آیکون یا منوی سینی پنجره را نشان می‌دهد.
+
+`Ctrl+Shift+V` پنجره را از هر جای دسکتاپ باز می‌کند.
+
+پس از `./install.sh` برنامه با ورود به سیستم در پس‌زمینه اجرا می‌شود.
+
+## محدودیت‌ها
+
+- فقط متن؛ تصویر و فایل پشتیبانی نمی‌شود.
+- `wl-paste --watch` در GNOME در دسترس نیست؛ خواندن کلیپ‌بورد بعد از مکث کوتاه کاربر انجام می‌شود تا فوکوس کیبورد دزدیده نشود.
+- میانبر با `gsettings` روی GNOME ثبت می‌شود.
+- روی X11 / KDE / Sway تست نشده است.
+
+## تصاویر
+
+![پنجره اصلی BoardFlow](screenshots/boardflow-main.png)
+
+![تاریخچه کلیپ‌بورد و سینی سیستم](screenshots/boardflow-history.png)
+
+## بهبودهای ممکن
+
+پشتیبانی از تصویر، محدود کردن آیتم‌های حساس، و سازگاری با محیط‌های غیر GNOME.
