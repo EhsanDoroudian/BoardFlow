@@ -94,8 +94,6 @@ pip install -r requirements.txt
 
 ## تصاویر
 
-![پنجره اصلی BoardFlow](screenshots/boardflow-main.png)
-
 ![تاریخچه کلیپ‌بورد و سینی سیستم](screenshots/boardflow-history.png)
 
 ## بهبودهای ممکن
